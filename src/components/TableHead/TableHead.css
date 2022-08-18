@@ -1,0 +1,32 @@
+.search{
+    float:left;
+    margin-bottom: 10px;
+  }
+  
+  .create {
+    float:right;
+    margin-bottom: 10px;
+  }
+
+  .containerHead {
+    display: flex;
+    grid-template-columns: auto auto auto auto;
+    justify-content: space-between;
+    gap: 50px;
+  }
+
+  @media screen and (max-width: 600px) {
+    .containerHead {
+      width: 100%;
+      display: block;
+      margin-bottom: 20px;
+      margin-left: 20px;
+    }
+    .search{
+      float: inline-start;
+    }
+    
+    .create{
+      float: left;
+    }
+  }

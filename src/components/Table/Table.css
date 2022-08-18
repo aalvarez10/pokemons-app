@@ -1,0 +1,35 @@
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    border: 2px solid rgb(194, 194, 194);
+    background-color: white;
+  }
+  
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+
+  th {
+    text-align: center;
+  }
+
+  .image{
+    text-align: center;
+  }
+
+  .icon-left {
+    color:  #6756f4;
+  }
+
+  .icon-right{
+    margin-left: 3vw;
+    color:  #6756f4;
+  }
+
+  .containerTable {
+    width: 100%;
+    overflow-x:auto;
+  }

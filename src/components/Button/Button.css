@@ -1,0 +1,28 @@
+button {
+    background-color: #6756f4;
+    color: aliceblue;
+    padding: 5px;
+    width: 150px;
+    height: 40px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    margin-left: 10px;
+}
+
+button:hover {
+    border: 1px solid #5155c1;
+    background-color: #5166c1;
+    color: #ffffff;
+    padding: 5px 10px;
+  }
+
+button:disabled,
+button[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}
+
+i {
+    margin-right: 10px;
+}
