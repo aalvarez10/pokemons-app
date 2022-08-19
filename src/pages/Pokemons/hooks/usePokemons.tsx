@@ -2,11 +2,17 @@ import { Pokemon } from '../../../interface/pokemons';
 import { useState, useEffect, useCallback } from 'react';
 import { del, get, post, put } from '../../../Services/service';
 
+interface Toast {
+    text:string;
+    icon:string;
+    color:string
+}
 export interface AdminPokemons{
     allPokemons : Pokemon[];
     allPokemonsClear : Pokemon[];
     isCardShow: boolean;
-    selectedPokemon?:Pokemon
+    selectedPokemon?:Pokemon;
+    toastInfo: Toast
 }
 
 export const usePokemons = () => {
@@ -19,10 +25,11 @@ export const usePokemons = () => {
                         name:'asdfsa',
                         image:'',
                         attack: 0,
-                        defense:0}
+                        defense:0},
+        toastInfo:{text:'',icon:'', color:''}
     })
 
-    const { allPokemons,isCardShow,selectedPokemon, allPokemonsClear } = statePokemons;
+    const { allPokemons,isCardShow,selectedPokemon, allPokemonsClear, toastInfo } = statePokemons;
 
     /*
     *Cargar todos los pokemons
@@ -61,35 +68,61 @@ export const usePokemons = () => {
     /*
     *Agregar Pokemon
     **/
+
     const addPokemon = (pokemon: Pokemon) => {
         post('/?idAuthor=1',pokemon)
         .then((pokemon:Pokemon) => {
+            console.log(pokemon);
+            if(pokemon.id){
             setStatePokemons(prev => ({
                 ...prev,
-                allPokemons: [...allPokemons,pokemon ]
+                allPokemons: [...allPokemons,pokemon ],
+                isCardShow:false,
+                toastInfo:{text:'Guardado correctamente!',icon:'fa fa-check',color:'success'}
             }))
+        }else{
+            setStatePokemons(prev => ({
+                ...prev,
+                
+                toastInfo:{text:'Error, complete los campos!',icon:'fa fa-close',color:'error'}
+            }))
+        }
         })
         .catch(err => console.log(err))
     }
 
     /*
-    *update Pokemon
+    *Editar Pokemon
     **/
    const updatePokemon = (pokemon:Pokemon) => {
     const {id_author:idAuthor,...pokemonData} = pokemon
     put(`https://bp-pokemons.herokuapp.com/${pokemon.id}`,{idAuthor,...pokemonData})
     .then((pokemon:Pokemon) => {
-        let filterPokemons = allPokemons.filter(pk => {
-            return pk.id !== pokemon.id;
-          })
-          setStatePokemons(prev => ({
-            ...prev,
-            allPokemons: [...filterPokemons,pokemon ]
-        }))
+        if(pokemon.id){
+            let filterPokemons = allPokemons.filter(pk => {
+                return pk.id !== pokemon.id;
+              })
+              setStatePokemons(prev => ({
+                ...prev,
+                allPokemons: [...filterPokemons,pokemon ],
+                isCardShow:false,
+                toastInfo:{text:'Actualizado correctamente!',icon:'fa fa-check',color:'success'}
+            }))
+        }else{
+            setStatePokemons(prev => ({
+                ...prev,
+                
+                toastInfo:{text:'Error, complete los campos!',icon:'fa fa-close',color:'error'}
+            }))
+        }
+       
     })
     .catch(err => console.log(err)) 
    }
 
+   /*
+   *Eliminar ppokemon
+   **/
 
    const deletePokemon = (id:number ) => {
     del(`https://bp-pokemons.herokuapp.com/${id}`)
@@ -99,7 +132,8 @@ export const usePokemons = () => {
           })
           setStatePokemons(prev => ({
             ...prev,
-            allPokemons: filterPokemons
+            allPokemons: filterPokemons,
+            toastInfo:{text:'Eliminado correctamente!',icon:'fa fa-check',color:'success'}
         }))
     })
     .catch(err => console.log(err)) 
@@ -121,6 +155,7 @@ export const usePokemons = () => {
         isCardShow,
         selectedPokemon,
         allPokemonsClear,
+        toastInfo,
 
         showCard,
         addPokemon,

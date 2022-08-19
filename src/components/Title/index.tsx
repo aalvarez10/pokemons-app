@@ -1,4 +1,4 @@
-import PropsType from 'prop-types';
+
 import './Title.css'
 
 interface Props {
@@ -11,8 +11,5 @@ const Title = ({title}:Props) => (
   </h1>
 )
 
-Title.prototype = {
-    title: PropsType.string.isRequired
-}
 
 export default Title;

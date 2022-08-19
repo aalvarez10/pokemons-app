@@ -11,11 +11,14 @@ interface Props {
 
 export const PokemonsContainer = ({children} :Props) => {
 
-    const { allPokemons, isCardShow, showCard, addPokemon, selectedPokemon, updatePokemon, deletePokemon, searchPokemon, allPokemonsClear } = usePokemons();
+    const { allPokemons, isCardShow, showCard, addPokemon, selectedPokemon, updatePokemon, 
+            deletePokemon, searchPokemon, allPokemonsClear, toastInfo 
+        } = usePokemons();
 
     return(
         <Provider value={{
-            allPokemons,isCardShow, showCard, addPokemon, selectedPokemon,updatePokemon, deletePokemon, searchPokemon,allPokemonsClear }}>
+            allPokemons,isCardShow, showCard, addPokemon, selectedPokemon,updatePokemon, 
+            deletePokemon, searchPokemon,allPokemonsClear,toastInfo }}>
             {children}
         </Provider>
     )

@@ -1,7 +1,10 @@
+import { useContext, useState, useEffect } from 'react';
+
 import './card.css'
 
 import Button from '../Button'
-import { useContext, useState, useEffect } from 'react';
+import Toast from '../Toast/Toast';
+
 import { PokemonsContext } from '../../pages/Pokemons/container/PokemonContainer';
  
 
@@ -16,23 +19,18 @@ const initialValues = {
 }
 const Card = () => {
 
-  const {isCardShow, showCard, addPokemon, selectedPokemon,updatePokemon} = useContext(PokemonsContext);
+  const {isCardShow, showCard, addPokemon, selectedPokemon,updatePokemon, toastInfo} = useContext(PokemonsContext);
   
 
-  const [formState, setFormState] = useState<any>(initialValues)
+  const [formState, setFormState] = useState<any>(initialValues);
 
-  const [buttonDisabled, setButtonDisabled] = useState<boolean>(true)
+  const [ showToast, setShowToast ] = useState<boolean>(false)
 
   useEffect(()=> {
-  if(selectedPokemon?.id){
-    setFormState(selectedPokemon)
-    setButtonDisabled(false)
-  }
-  else{
-    setFormState(initialValues)
-    setButtonDisabled(true)
-  }
-  
+  selectedPokemon?.id? 
+  setFormState(selectedPokemon):
+  setFormState(initialValues)
+   
   },[selectedPokemon])
 
   const onClick = () => {
@@ -41,11 +39,6 @@ const Card = () => {
   }
 
   const handleChange = (e: { target: { name: string; value: string | number; }; }) => {
-    if(e.target.name === 'name' && e.target.value !== ''){
-      setButtonDisabled(false)
-    }else{
-      setButtonDisabled(true)
-    }
     setFormState((prev:any )=> ({
       ...prev,
       [e.target.name]: e.target.value
@@ -53,20 +46,24 @@ const Card = () => {
   }
 
   const handleSave = () => {
-   
+   setShowToast(true)
     formState.id ? updatePokemon(formState) : addPokemon(formState)
-    showCard(false)
     setFormState(initialValues)
+    setTimeout(() => {
+      setShowToast(false)
+    },5000)
+   
   }
 
   return (
-    isCardShow ? (
+    <>
+    { isCardShow ? (
       <div className="card">
         <h1 className='title'>{formState.id ? 'Editar' :'Nuevo'} Pokemon</h1>
         <div className="grid-container">
           <div>Nombre:</div>
           <div>
-            <input type="text"  placeholder="Nombre" name='name' value={formState.name} onChange={handleChange}/>
+            <input autoFocus type="text"  placeholder="Nombre" name='name' value={formState.name} onChange={handleChange}/>
           </div>
           <div>Ataque:</div>  
           <div>
@@ -102,12 +99,18 @@ const Card = () => {
           </div>
         </div>
         <div className='buttons'>
-        <Button title="Guardar" icon='fa fa-hdd-o' handleClick={handleSave} disable={buttonDisabled}/>
+        <Button title="Guardar" icon='fa fa-hdd-o' handleClick={handleSave}/>
         <Button title="Cancelar" icon='fa fa-remove' handleClick={onClick}/>
         </div>
+      
+            
         
       </div>
+      
       ): <div/>
+    }
+    <Toast text={toastInfo.text} icon={toastInfo.icon} color= {toastInfo.color} show={showToast}/>
+    </>
   )
 }
 

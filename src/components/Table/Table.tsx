@@ -1,22 +1,29 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import './Table.css'
 import { PokemonsContext } from '../../pages/Pokemons/container/PokemonContainer';
 import { Pokemon } from '../../interface/pokemons';
+import Toast from '../Toast/Toast';
 
 
 
  const Table = () => {
 
-    const {allPokemons, showCard, deletePokemon} = useContext(PokemonsContext)
+    const {allPokemons, showCard, deletePokemon,toastInfo} = useContext(PokemonsContext)
     const headers = ['Nombre','Imagen','Ataque','Defensa','Acciones']
+
+    const [ showToast, setShowToast ] = useState<boolean>(false)
 
     const handleShow = (pokemon:Pokemon) => {
       showCard(true,pokemon)
     }
 
     const handleDelete = (id:number) => {
-      console.log(id);
+      setShowToast(true)
       deletePokemon(id);
+      setTimeout(() => {
+      
+        setShowToast(false)
+      },5000)
     }
 
   return (
@@ -58,6 +65,7 @@ import { Pokemon } from '../../interface/pokemons';
         
        
     </table>
+    <Toast text={toastInfo.text} icon={toastInfo.icon} color = {toastInfo.color} show={showToast}/>
     </div>
   )
 }
